@@ -19,7 +19,9 @@ public class CreateController {
     @PostMapping("/shortener/create")
     public ResponseEntity<CreateResponse> createShortUrl(@RequestBody CreateRequest request) {
         CreateResponse response = new CreateResponse();
-        response.setShortUrl(this.createUseCase.create(request.getUrl()));
+        String result = this.createUseCase.create(request.getUrl());
+        response.setShortUrl(result);
+        response.setMessage(result.equals("")?"URL NOT SHORTENED":"URL SHORTENED");
         return ResponseEntity.ok(response);
     }
 }

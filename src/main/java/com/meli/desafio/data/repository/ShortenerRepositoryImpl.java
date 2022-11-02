@@ -1,5 +1,7 @@
 package com.meli.desafio.data.repository;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -13,6 +15,8 @@ import com.mongodb.client.result.UpdateResult;
 @Repository
 public class ShortenerRepositoryImpl implements ShortenerRepository {
 
+	private final String[] listUsers = {"aaa","bbb","ccc"};
+	
 	@Autowired
     private MongoTemplate mongoTemplate;
 	
@@ -26,7 +30,7 @@ public class ShortenerRepositoryImpl implements ShortenerRepository {
 
 	@Override
 	public boolean findUser(String user) {
-		return true;
+		return Arrays.asList(listUsers).contains(user);
 	}
 
 	@Override

@@ -19,7 +19,9 @@ public class ReadController {
     @GetMapping("/shortener/read/{shortUrl}")
     public ResponseEntity<ReadResponse> createShortUrl(@PathVariable String shortUrl) {
         ReadResponse response = new ReadResponse();
-        response.setUrl(this.readUseCase.read(shortUrl));
+        String result = this.readUseCase.read(shortUrl);
+        response.setUrl(result);
+        response.setMessage(result.equals("")?"URL NOT FOUND/NOT AVAILABLE":"URL FOUND");
         return ResponseEntity.ok(response);
     }
 }

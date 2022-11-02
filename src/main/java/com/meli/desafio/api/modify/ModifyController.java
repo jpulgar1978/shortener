@@ -1,7 +1,6 @@
 package com.meli.desafio.api.modify;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,21 +19,27 @@ public class ModifyController {
     @PutMapping("/shortener/enable/{shortUrl}/{user}")
     public ResponseEntity<ModifyResponse> enableShortUrl(@PathVariable String shortUrl, @PathVariable String user) {
         ModifyResponse response = new ModifyResponse();
-        response.setResult(this.modifyUseCase.setStatus(shortUrl, user, true));
+        boolean result = this.modifyUseCase.setStatus(shortUrl, user, true);
+        response.setResult(result?"OK":"ERROR");
+        response.setMessage(result?"URL ENABLED":"URL NOT ENABLED");
         return ResponseEntity.ok(response);
     }
     
     @PutMapping("/shortener/disable/{shortUrl}/{user}")
     public ResponseEntity<ModifyResponse> disableShortUrl(@PathVariable String shortUrl, @PathVariable String user) {
         ModifyResponse response = new ModifyResponse();
-        response.setResult(this.modifyUseCase.setStatus(shortUrl, user, false));
+        boolean result = this.modifyUseCase.setStatus(shortUrl, user, false);
+        response.setResult(result?"OK":"ERROR");
+        response.setMessage(result?"URL DISABLED":"URL NOT DISABLED");
         return ResponseEntity.ok(response);
     }
     
     @PutMapping("/shortener/setUrl/{shortUrl}/{user}/{newUrl}")
     public ResponseEntity<ModifyResponse> createShortUrl(@PathVariable String shortUrl, @PathVariable String user, @PathVariable String newUrl) {
         ModifyResponse response = new ModifyResponse();
-        response.setResult(this.modifyUseCase.setNewUrl(shortUrl, user, newUrl));
+        boolean result = this.modifyUseCase.setNewUrl(shortUrl, user, newUrl);
+        response.setResult(result?"OK":"ERROR");
+        response.setMessage(result?"NEW URL STORED":"NEW URL NOT STORED");
         return ResponseEntity.ok(response);
     }
 }

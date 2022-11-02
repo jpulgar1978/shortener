@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.hash.Hashing;
-import com.meli.desafio.common.kafka.KafkaProducer;
+import com.meli.desafio.config.KafkaMessageProducer;
 import com.meli.desafio.data.entity.Shortener;
 import com.meli.desafio.data.repository.ShortenerRepository;
+import com.meli.desafio.domain.mapper.EventMapper;
+import com.meli.desafio.domain.model.Event;
 
 @Service
 public class CreateUseCaseImpl implements CreateUseCase {
@@ -16,12 +18,14 @@ public class CreateUseCaseImpl implements CreateUseCase {
 	@Autowired
 	private ShortenerRepository shortenerRepository;
 	
+	@Autowired
+	private KafkaMessageProducer<Event> kafkaMessageProducer;
+	
 	@Override
 	public String create(String url) {
-		KafkaProducer<String> kafka = new KafkaProducer<>();
-		
 		Shortener foundUrl = shortenerRepository.findByUrl(url);
 		if (foundUrl!=null) {
+			kafkaMessageProducer.sendMessage(EventMapper.createEvent("create", "RELOAD OK", foundUrl.getKey()));
 			return foundUrl.getKey();
 		}
 		String hash = Hashing.sha256().hashString(url, StandardCharsets.UTF_8).toString();
@@ -39,7 +43,7 @@ public class CreateUseCaseImpl implements CreateUseCase {
 		}
 		
 		Shortener s = shortenerRepository.saveNew(hash.substring(i, i + 7), url);
-		kafka.sendMessage(s.getKey());
+		kafkaMessageProducer.sendMessage(EventMapper.createEvent("create", "NEW OK", s.getKey()));
 		return s.getKey();
 	}
 	

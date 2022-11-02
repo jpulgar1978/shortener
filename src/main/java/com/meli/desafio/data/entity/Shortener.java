@@ -23,7 +23,7 @@ public class Shortener{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 	public void setStatus(boolean status) {

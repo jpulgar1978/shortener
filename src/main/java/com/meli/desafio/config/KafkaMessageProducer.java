@@ -1,4 +1,4 @@
-package com.meli.desafio.common.kafka;
+package com.meli.desafio.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,21 +9,21 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Component
-public class KafkaProducer <T> {
+public class KafkaMessageProducer <T> {
 	
     @Value(value = "${kafka.topicName}")
     private String topicName;
     
-	@Autowired
-	private KafkaTemplate<String, Object> kafkaTemplate;
-	
+    @Value(value = "${kafka.bootstrapAddress}")
+    private String bootstrapAddress;
+    
+    @Autowired
+    public KafkaTemplate<String, Object> kafkaMessageTemplate;
+    
 	public void sendMessage(T message) {
-        
-	    ListenableFuture<SendResult<String, Object>> future = 
-	      kafkaTemplate.send(topicName, message);
+	    ListenableFuture<SendResult<String, Object>> future = kafkaMessageTemplate.send(topicName, message);
 		
 	    future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
-
 	        @Override
 	        public void onSuccess(SendResult<String, Object> result) {
 	            System.out.println("Sent message=[" + message + 
