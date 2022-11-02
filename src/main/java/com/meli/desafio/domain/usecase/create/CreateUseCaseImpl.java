@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.hash.Hashing;
+import com.meli.desafio.common.kafka.KafkaProducer;
 import com.meli.desafio.data.entity.Shortener;
 import com.meli.desafio.data.repository.ShortenerRepository;
 
@@ -17,6 +18,8 @@ public class CreateUseCaseImpl implements CreateUseCase {
 	
 	@Override
 	public String create(String url) {
+		KafkaProducer<String> kafka = new KafkaProducer<>();
+		
 		Shortener foundUrl = shortenerRepository.findByUrl(url);
 		if (foundUrl!=null) {
 			return foundUrl.getKey();
@@ -36,6 +39,7 @@ public class CreateUseCaseImpl implements CreateUseCase {
 		}
 		
 		Shortener s = shortenerRepository.saveNew(hash.substring(i, i + 7), url);
+		kafka.sendMessage(s.getKey());
 		return s.getKey();
 	}
 	
