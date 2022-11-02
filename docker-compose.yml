@@ -1,15 +1,5 @@
 version: '3.8'
 services:
-  api:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    container_name: api
-    links:
-      - mongo
-      - kafka
   mongo:
     restart: always
     image: mongo:4.4
@@ -42,5 +32,15 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: api
+    links:
+      - mongo
+      - kafka
 volumes:
   mongodb:
