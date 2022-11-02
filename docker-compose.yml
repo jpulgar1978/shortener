@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: api
+    links:
+      - mongo
+      - kafka
+  mongo:
+    restart: always
+    image: mongo:4.4
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb:/data/db
+  zookeeper:
+    restart: always
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+  kafka:
+    restart: always
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      TOPIC_AUTO_CREATE: 1
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    restart: always
+    ports:
+      - '8088:8080'
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+volumes:
+  mongodb:
