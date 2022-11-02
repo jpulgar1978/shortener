@@ -5,12 +5,14 @@ Desafío
 Crear un URL shortener para ser utilizado en promociones enviadas a travès twitter.
 
 Requisitos funcionales
+
 1.- Crear un alias corto para una URL, es decir, pasar de una URL como esta: "https://www.enjoyalgorithms.com/blog/design-a-url-shortening-service-like-tiny-url" a un alias corto como "149a1d3"
 2.- Dado un alias, recuperar la URL original
 3.- Habilitar/Deshabilitar una URL. Sòlo las URL habilitadas pueden ser recuperadas
 4.- Cambiar la URL asignada al alias
 
 Requisitos no funcionales
+
 1.- Los alias generados deben tener una vigencia indefinida
 2.- La plataforma debe soportar picos de tráfico alrededor de 1M RPM
 3.- Se debe contar con estadísticas de acceso nearly real time
@@ -18,10 +20,12 @@ Requisitos no funcionales
 5.- La solución debe tener un uptime de 99,98%
 
 Supuestos funcionales
+
 1.- El largo máximo de una URL es de 2048 caracteres
 2.- Los usuarios son manejados por otro componente el cual puede ser consultado respecto de la validez de un usuario
 
 Supuestos no funcionales
+
 1.- Se utilizará una base de datos para almacenar la relación entre el alias y la correcpondiente URL
 1.- Se considerará como vigencia indefinida 50 años
 2.- Se consideraràn los siguientes tramos de tráfico al día:
@@ -37,6 +41,7 @@ Supuestos no funcionales
 9.- Se utilizará la base de datos mongodb principalmente debido a su capacidad de escalamiento horizontal
 
 Algotimo de generación de alias
+
 1.- Se utiliza el algoritmo SHA-256 para generar un string de 64 caracteres
 2.- Se toman los 7 primeros caracteres y se buscan en la base de datos:
   a)Si no se encuentra al alias se inserta en la base de datos 
