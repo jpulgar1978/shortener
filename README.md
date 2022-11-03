@@ -76,12 +76,60 @@ Crear un URL shortener para ser utilizado en promociones enviadas a travès twit
 
 ## Arquitectura
 
+<img src="./assets/shortener-arquitectura.png" alt="arquitectura">
+
+## Descripción de Componentes
+
+### User Interface
+Front End de cara al usuario
+### User Interface
+Punto de entrada que permitirá acceder a varias instanacias de la API shortener
+### User Interface
+Servicio que realiza el proceso de transformación y administración de URLs y sus correspondientes alias
+### API Users
+Servicio que realiza el proceso de gestión de usuarios
+### Mongo DB
+Base de Datos documental que almacenará las URL y sus alias
+### Kafka Queue
+Broker para comunicación asíncrona con el componente de Analytics
+### Analytics
+Componente encargado de obtener y almacenar los eventos desde la API shortener para su posterior análisis
+
 
 ## Descripción API
 
+### Create
+http://139.144.190.16:8080/swagger-ui/index.html#/create-controller/createShortUrl_1
 
+<img src="./assets/shortener-create.png" alt="create">
+
+### Read
+http://139.144.190.16:8080/swagger-ui/index.html#/read-controller/createShortUrl_2
+
+<img src="./assets/shortener-read.png" alt="read">
+
+### Enable
+http://localhost:8080/swagger-ui/index.html#/modify-controller/enableShortUrl
+
+<img src="./assets/shortener-enable.png" alt="enable">
+
+### Disable
+http://localhost:8080/swagger-ui/index.html#/modify-controller/disableShortUrl
+
+<img src="./assets/shortener-disable.png" alt="disable">
+
+### New URL
+http://localhost:8080/swagger-ui/index.html#/modify-controller/createShortUrl
+
+<img src="./assets/shortener-newUrl.png" alt="newUrl">
 
 ## Servidor
   
 http://139.144.190.16:8080
 
+## Ejecución
+  
+With Docker:
+```
+docker-compose up -d
+```
